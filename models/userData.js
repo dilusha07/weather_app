@@ -7,10 +7,13 @@ const userData = new mongoose.Schema({
       unique: true,
       lowercase: true
     },
-    location: {
-      type: String,
-      required: [true, 'Please enter a user location'],
+    location: { 
+      city: { 
+        type: String, 
+        required: true 
+      },
     },
+    
     weatherData: [
         {
             date: { 
