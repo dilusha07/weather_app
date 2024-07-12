@@ -91,7 +91,27 @@ app.post('/users', async (req, res) => {
   res.status(201).send(user);
 });
 
+// update user's location
+app.put('/users/:email', async (req, res) => {
+  const { email } = req.params;
+  const { location } = req.body;
 
+  const weatherData = await getWeatherData(location.city);
+
+  const user = await User.findOneAndUpdate({ email }, { location }, { new: true });
+
+  if (!user) {
+      return res.status(404).send('User not found');
+  }
+
+  user.weatherData.push({
+      date: new Date(),
+      data: weatherData,
+  });
+  await user.save();
+
+  res.send(user);
+});
 
 // Start server
 app.listen(port, () => {
