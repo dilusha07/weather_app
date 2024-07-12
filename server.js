@@ -2,6 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const config = require('./config.json');
 const User = require('./models/userData');
+const cron = require('node-cron');
+const { sendWeatherReport } = require('./utils/weather');
+const userRoutes = require('./routes/userRoute');
 
 const app = express();
 app.use(express.json());
@@ -30,6 +33,8 @@ const DB_URL = "mongodb+srv://Test1:Test1@cluster1.lshemxo.mongodb.net/?retryWri
   //   console.log(data);
   // }
 
+  // Use user routes
+app.use('/users', userRoutes);
 
 // Function to fetch weather data
 async function getWeatherData(city) {
@@ -146,6 +151,20 @@ app.delete('/users/:email', async (req, res) => {
     res.status(500).send({ error: 'An error occurred while deleting the user' });
   }
 });
+
+// Sechedule to send weather reports every 3 hours
+cron.schedule('0 0 */3 * * *', async () => {
+  const users = await User.find();
+
+  for (const user of users) {
+      try {
+          await sendWeatherReport(user);
+      } catch (error) {
+          console.error(`Failed to send weather report to ${user.email}:`, error);
+      }
+  }
+});
+
 
 // Start server
 app.listen(port, () => {
