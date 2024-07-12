@@ -70,7 +70,7 @@ app.get('/weather', async (req, res) => {
   }
 });
 
-  // Route to store user details
+  // Store user details
 app.post('/users', async (req, res) => {
   const { email, location } = req.body;
 
@@ -112,6 +112,25 @@ app.put('/users/:email', async (req, res) => {
 
   res.send(user);
 });
+
+// Get user's weather data by given day
+app.get('/users/:email/weather', async (req, res) => {
+  const { email } = req.params;
+  const { date } = req.query;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+      return res.status(404).send('User not found');
+  }
+
+  const weatherData = user.weatherData.filter(data => new Date(data.date).toDateString() === new Date(date).toDateString());
+
+  res.send(weatherData);
+});
+
+
+
 
 // Start server
 app.listen(port, () => {
