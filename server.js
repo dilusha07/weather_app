@@ -130,7 +130,22 @@ app.get('/users/:email/weather', async (req, res) => {
 });
 
 
+// Delete a user by email
+app.delete('/users/:email', async (req, res) => {
+  const { email } = req.params;
 
+  try {
+    const user = await User.findOneAndDelete({ email });
+
+    if (!user) {
+      return res.status(404).send({ error: 'User not found' });
+    }
+
+    res.send({ message: 'User deleted successfully' });
+  } catch (error) {
+    res.status(500).send({ error: 'An error occurred while deleting the user' });
+  }
+});
 
 // Start server
 app.listen(port, () => {
