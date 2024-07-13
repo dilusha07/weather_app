@@ -9,6 +9,7 @@ This is a Node.js API that stores users' emails and locations, and automatically
 - Node.js
 - MongoDB (You can use MongoDB Atlas for a cloud-based solution)
 - Git
+
   
 1. Clone the repository:
    ```sh
@@ -19,6 +20,7 @@ This is a Node.js API that stores users' emails and locations, and automatically
 5. Start the server using `npm start`.
 
 ### APIs
+
 POST /users - Store user details (email and location).
 PUT /users/:email - Update user's location.
 GET /users/:email/weather - Retrieve user's weather data for a given day.
@@ -27,9 +29,11 @@ DELETE /users/:email - Delete a user by email.
 POST /users/send-weather-report/:email - Trigger sending weather report email.
 
 ###Testing
+
 Run the tests using Postman.
 
 ###Deployment
+
 Deploy on Vercel
 
 
