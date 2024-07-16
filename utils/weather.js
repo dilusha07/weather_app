@@ -18,16 +18,20 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-//Get weather data
-const getWeatherData = async (city) => {
+// Fetch weather data using OpenWeatherMap API
+async function getWeatherData(city) {
+    const apiKey = config.API_KEY;
+    const weatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+   
     try {
-        const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${config.API_KEY}`);
-        return response.data;
+      const response = await axios.get(weatherURL);
+      const weatherData = await response.data;
+      return weatherData;
     } catch (error) {
-        console.error('Error fetching weather data:', error);
-        throw error;
+      console.log("Error fetching weather data:", error);
+      throw error;
     }
-};
+  }
 
 // Generate weather text using OpenAI
 // const generateWeatherText = async (weatherData) => {

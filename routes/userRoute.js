@@ -1,25 +1,9 @@
 const express = require('express');
 const User = require('../models/userData');
-const config = require('../config.json');
-const { sendWeatherReport } = require('../utils/weather');
+const { sendWeatherReport , getWeatherData} = require('../utils/weather');
 
 const router = express.Router();
-
-// Fetch weather data using OpenWeatherMap API
-async function getWeatherData(city) {
-    const apiKey = config.API_KEY;
-    const weatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
-   
-    try {
-      const response = await fetch(weatherURL);
-      const weatherData = await response.json();
-      return weatherData;
-    } catch (error) {
-      console.log("Error fetching weather data:", error);
-      throw error;
-    }
-  }
-
+  
     // GET route to fetch weather data for a specified city
     router.get('/weather', async (req, res) => {
     const { city } = req.query;
